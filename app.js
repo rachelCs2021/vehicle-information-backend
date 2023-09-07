@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors = require('cors')
 require('dotenv').config()
 
 mongoose.connect(
@@ -19,6 +20,7 @@ mongoose.connection.on("connected", () => {
 const vehicleRoutes = require("./api/routes/vehicles");
 
 app.use(morgan("dev"));
+app.use(cors())
 
 app.use(express.json());
 app.use(

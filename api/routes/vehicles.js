@@ -11,12 +11,12 @@ const {
 
 router.get("/", getAllVehicles);
 
-router.get("/:vehicleNumber", getVehicle);
+router.get("/:vehicleId", getVehicle);
 
 router.post("/newVehicle", createNewVehicle);
 
-router.patch("/:vehicleNumber", updateVehicle);
+router.patch("/:vehicleId", updateVehicle);
 
-router.delete("/:vehicleNumber", deleteVehicle);
+router.delete("/:vehicleId", deleteVehicle);
 
 module.exports = router;
