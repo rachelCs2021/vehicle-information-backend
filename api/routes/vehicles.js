@@ -11,7 +11,7 @@ const {
 
 router.get("/", getAllVehicles);
 
-router.get("/:vehicleId", getVehicle);
+router.get("/:vehicleNumber", getVehicle);
 
 router.post("/newVehicle", createNewVehicle);
 

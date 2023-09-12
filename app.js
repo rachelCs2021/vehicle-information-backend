@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const cors = require('cors')
-require('dotenv').config()
+const cors = require("cors");
+require("dotenv").config();
 
 mongoose.connect(
   `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@vehicle.xv7lxjr.mongodb.net/?retryWrites=true&w=majority`,
@@ -20,7 +20,7 @@ mongoose.connection.on("connected", () => {
 const vehicleRoutes = require("./api/routes/vehicles");
 
 app.use(morgan("dev"));
-app.use(cors())
+app.use(cors());
 
 app.use(express.json());
 app.use(

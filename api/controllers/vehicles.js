@@ -1,39 +1,53 @@
 const Vehicle = require("../models/vehicles");
 
 module.exports = {
-  getAllVehicles: (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    console.log('query', page, limit);
+  getAllVehicles: async (req, res) => {
+    try {
+      const page = req.query.$skip;
+      const limit = req.query.$top;
 
-    Vehicle.find()
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .then((vehicles) => {
-        res.status(200).json({
-          vehicles,
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({
-          error,
-        });
+      const vehiclesCount = await Vehicle.countDocuments({}).exec();
+
+      const vehicles = await Vehicle.find(null, null, {
+        skip: page,
+        limit: limit,
       });
+      
+      res.status(200).json({
+        vehicles,
+        count: vehiclesCount,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
   },
-  getVehicle: (req, res) => {
-    const vehicleId = req.params.vehicleId;
+  getVehicle: async (req, res) => {
+    try {
+      const vehicleNumber = req.params.vehicleNumber;
+      const page = req.query.$skip;
+      const limit = req.query.$top;
 
-    Vehicle.findById(vehicleId)
-      .then((vehicle) => {
-        res.status(200).json({
-          vehicle,
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({
-          error,
-        });
+      const resultsCount = await Vehicle.countDocuments({
+        carNumber: { $regex: vehicleNumber },
       });
+
+      const vehicles = await Vehicle.find({
+        carNumber: { $regex: vehicleNumber },
+      })
+        .skip(page)
+        .limit(limit);
+
+      res.status(200).json({
+        vehicles,
+        count: resultsCount,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
   },
   createNewVehicle: (req, res) => {
     const { carNumber, manufacturer, model, passedTestOnDate } = req.body;
