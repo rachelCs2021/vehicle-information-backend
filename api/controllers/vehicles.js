@@ -12,7 +12,7 @@ module.exports = {
         skip: page,
         limit: limit,
       });
-      
+
       res.status(200).json({
         vehicles,
         count: vehiclesCount,
@@ -73,55 +73,42 @@ module.exports = {
         });
       });
   },
-  updateVehicle: (req, res) => {
-    const vehicleId = req.params.vehicleId;
+  updateVehicle: async (req, res) => {
+    try {
+      const vehicleId = req.params.vehicleId;
 
-    Vehicle.findById(vehicleId)
-      .then((vehicle) => {
-        console.log("vehicle:", vehicle);
-        if (!vehicle) {
-          return res.status(404).json({
-            message: "Vehicle Not Found",
-          });
-        }
-      })
-      .then(() => {
-        Vehicle.updateOne({ _id: vehicleId }, req.body)
-          .then(() => {
-            res.status(200).json({
-              message: `UPDATE VEHICLE - ${vehicleId}`,
-            });
-          })
-          .catch((error) => {
-            res.status(500).json({
-              error,
-            });
-          });
+      const vehicle = await Vehicle.findById(vehicleId);
+
+      if (!vehicle) {
+        return res.status(404).json({
+          message: "Vehicle Not Found",
+        });
+      }
+
+      await Vehicle.updateOne({ _id: vehicleId }, req.body);
+
+      res.status(200).json({
+        message: `UPDATE VEHICLE - ${vehicleId}`,
       });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
   },
   deleteVehicle: (req, res) => {
     const vehicleId = req.params.vehicleId;
 
-    Vehicle.findById(vehicleId)
-      .then((vehicle) => {
-        if (!vehicle) {
-          return res.status(404).json({
-            message: "vehicle Not Found",
-          });
-        }
-      })
+    Vehicle.findByIdAndDelete({ _id: vehicleId })
       .then(() => {
-        Vehicle.deleteOne({ _id: vehicleId })
-          .then(() => {
-            res.status(200).json({
-              message: `DELETE VEHICLE - ${vehicleId}`,
-            });
-          })
-          .catch((error) => {
-            res.status(500).json({
-              error,
-            });
-          });
+        res.status(200).json({
+          message: `DELETE VEHICLE - ${vehicleId}`,
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          error,
+        });
       });
   },
 };
