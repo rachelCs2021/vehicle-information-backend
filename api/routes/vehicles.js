@@ -13,7 +13,7 @@ router.get("/", getAllVehicles);
 
 router.get("/:vehicleNumber", getVehicle);
 
-router.post("/newVehicle", createNewVehicle);
+router.post("/", createNewVehicle);
 
 router.patch("/:vehicleId", updateVehicle);
 
