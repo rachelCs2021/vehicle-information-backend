@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   getAllVehicles,
+  getVehiclesTestReminder,
   getVehicle,
   createNewVehicle,
   updateVehicle,
@@ -10,6 +11,8 @@ const {
 } = require("../controllers/vehicles");
 
 router.get("/", getAllVehicles);
+
+router.get("/testReminder", getVehiclesTestReminder);
 
 router.get("/:vehicleNumber", getVehicle);
 

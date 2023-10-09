@@ -8,10 +8,12 @@ module.exports = {
 
       const vehiclesCount = await Vehicle.countDocuments({}).exec();
 
-      const vehicles = await Vehicle.find(null, null, {
-        skip: page,
-        limit: limit,
-      });
+      const vehicles = await Vehicle.find()
+        .sort({
+          passedTestOnDate: 1,
+        })
+        .skip(page)
+        .limit(limit);
 
       res.status(200).json({
         vehicles,
@@ -42,6 +44,33 @@ module.exports = {
       res.status(200).json({
         vehicles,
         count: resultsCount,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
+  },
+  getVehiclesTestReminder: async (req, res) => {
+    try {
+      const vehicles = await Vehicle.find().sort({ passedTestOnDate: 1 });
+
+      const today = new Date();
+      const passedTestTime = new Date(today);
+      passedTestTime.setDate(today.getDate() + 14);
+
+      let needTest = [];
+
+      for (let i = 0; i < vehicles.length; i++) {
+        const vehicleDate = new Date(vehicles[i].passedTestOnDate);
+
+        if (vehicleDate <= passedTestTime) {
+          needTest.push(vehicles[i]);
+        }
+      }
+
+      res.status(200).json({
+        needTest,
       });
     } catch (error) {
       res.status(500).json({
