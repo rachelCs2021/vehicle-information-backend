@@ -18,6 +18,7 @@ mongoose.connection.on("connected", () => {
 });
 
 const vehicleRoutes = require("./api/routes/vehicles");
+const userRoutes = require("./api/routes/users");
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -28,6 +29,8 @@ app.use(
     extended: false,
   })
 );
+
+app.use(express.static("public"));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -43,6 +46,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/vehicles", vehicleRoutes);
+app.use("/users", userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");
