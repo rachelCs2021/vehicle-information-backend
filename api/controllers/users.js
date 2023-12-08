@@ -22,7 +22,6 @@ module.exports = {
         );
         res.json({ accessToken });
       } else {
-        console.log("error");
         res.status(400).json({ message: "user or password not valid" });
       }
     } catch (error) {
@@ -52,7 +51,6 @@ module.exports = {
       );
       res.json({ accessToken });
     } catch (e) {
-      console.log(e);
       res.status(500).json({ message: "internal server error" });
     }
   },

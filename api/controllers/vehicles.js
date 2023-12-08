@@ -87,7 +87,6 @@ module.exports = {
       model,
       passedTestOnDate,
     });
-    console.log("new vehicle", vehicle);
 
     vehicle
       .save()
